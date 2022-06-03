@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import {
   BsFillPlayCircleFill,
@@ -10,76 +10,88 @@ import { FiRepeat } from "react-icons/fi";
 import { useStateProvider } from "../utils/StateProvider";
 import axios from "axios";
 import { reducerCases } from "../utils/Constants";
-export default function PlayerControls() {
-  const [{ token, playerState }, dispatch] = useStateProvider();
+import song1 from "../assets/mp3/Bao Lâu Ta Lại Yêu Một Người l Doãn Hiếu.mp3";
 
-  const changeState = async () => {
-    const state = playerState ? "pause" : "play";
-    await axios.put(
-      `https://api.spotify.com/v1/me/player/${state}`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
+export default function PlayerControls() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [trackProgress, setTrackProgress] = useState(0);
+  var audioSrc = song1;
+
+  const audioRef = useRef(new Audio(song1));
+
+  const intervalRef = useRef();
+
+  const isReady = useRef(false);
+
+  const { duration } = audioRef.current;
+
+  const currentPercentage = duration ? (trackProgress / duration) * 100 : 0;
+
+  const startTimer = () => {
+    clearInterval(intervalRef.current);
+
+    intervalRef.current = setInterval(() => {
+      if (audioRef.current.ended) {
+        handleNext();
+      } else {
+        setTrackProgress(audioRef.current.currentTime);
       }
-    );
-    dispatch({
-      type: reducerCases.SET_PLAYER_STATE,
-      playerState: !playerState,
-    });
+    }, [1000]);
   };
-  const changeTrack = async (type) => {
-    await axios.post(
-      `https://api.spotify.com/v1/me/player/${type}`,
-      {},
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
+
+  useEffect(() => {
+    if (audioRef.current.src) {
+      if (isPlaying) {
+        audioRef.current.play();
+        startTimer();
+      } else {
+        clearInterval(intervalRef.current);
+        audioRef.current.pause();
       }
-    );
-    dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
-    const response1 = await axios.get(
-      "https://api.spotify.com/v1/me/player/currently-playing",
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-    if (response1.data !== "") {
-      const currentPlaying = {
-        id: response1.data.item.id,
-        name: response1.data.item.name,
-        artists: response1.data.item.artists.map((artist) => artist.name),
-        image: response1.data.item.album.images[2].url,
-      };
-      dispatch({ type: reducerCases.SET_PLAYING, currentPlaying });
     } else {
-      dispatch({ type: reducerCases.SET_PLAYING, currentPlaying: null });
+      if (isPlaying) {
+        audioRef.current = new Audio(audioSrc);
+        audioRef.current.play();
+        startTimer();
+      } else {
+        clearInterval(intervalRef.current);
+        audioRef.current.pause();
+      }
     }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    return () => {
+      audioRef.current.pause();
+      clearInterval(intervalRef.current);
+    };
+  }, []);
+
+  const handleNext = () => {};
+
+  const handlePrev = () => {};
+
+  const changeState = () => {
+    setIsPlaying(!isPlaying);
   };
+
   return (
     <Container>
       <div className="shuffle">
         <BsShuffle />
       </div>
       <div className="previous">
-        <CgPlayTrackPrev onClick={() => changeTrack("previous")} />
+        <CgPlayTrackPrev />
       </div>
       <div className="state">
-        {playerState ? (
+        {isPlaying ? (
           <BsFillPauseCircleFill onClick={changeState} />
         ) : (
           <BsFillPlayCircleFill onClick={changeState} />
         )}
       </div>
       <div className="next">
-        <CgPlayTrackNext onClick={() => changeTrack("next")} />
+        <CgPlayTrackNext />
       </div>
       <div className="repeat">
         <FiRepeat />
