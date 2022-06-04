@@ -8,102 +8,113 @@ import {
 import { CgPlayTrackNext, CgPlayTrackPrev } from "react-icons/cg";
 import { FiRepeat } from "react-icons/fi";
 import { useStateProvider } from "../utils/StateProvider";
-import axios from "axios";
+
 import { reducerCases } from "../utils/Constants";
 import song1 from "../assets/mp3/Bao Lâu Ta Lại Yêu Một Người l Doãn Hiếu.mp3";
+import song2 from "../assets/mp3/Playlist 1 Hour Acoustic Music To Cheer You Up On A Tough Day.mp3";
+
+import { getSecondToMinute } from "../utils/helper";
 
 export default function PlayerControls() {
+  // state
   const [isPlaying, setIsPlaying] = useState(false);
-  const [trackProgress, setTrackProgress] = useState(0);
-  var audioSrc = song1;
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
 
-  const audioRef = useRef(new Audio(song1));
+  // references
+  const audioPlayer = useRef(); // reference our audio component
+  const progressBar = useRef(); // reference our progress bar
+  const animationRef = useRef(); // reference the animation
 
-  const intervalRef = useRef();
+  useEffect(() => {
+    const seconds = Math.floor(audioPlayer.current.duration);
+    setDuration(seconds);
+    progressBar.current.max = seconds;
+  }, [audioPlayer?.current?.loadedmetadata, audioPlayer?.current?.readyState]);
 
-  const isReady = useRef(false);
-
-  const { duration } = audioRef.current;
-
-  const currentPercentage = duration ? (trackProgress / duration) * 100 : 0;
-
-  const startTimer = () => {
-    clearInterval(intervalRef.current);
-
-    intervalRef.current = setInterval(() => {
-      if (audioRef.current.ended) {
-        handleNext();
-      } else {
-        setTrackProgress(audioRef.current.currentTime);
-      }
-    }, [1000]);
+  const togglePlayPause = () => {
+    const prevValue = isPlaying;
+    setIsPlaying(!prevValue);
+    if (!prevValue) {
+      audioPlayer.current.play();
+      animationRef.current = requestAnimationFrame(whilePlaying);
+    } else {
+      audioPlayer.current.pause();
+      cancelAnimationFrame(animationRef.current);
+    }
   };
 
-  useEffect(() => {
-    if (audioRef.current.src) {
-      if (isPlaying) {
-        audioRef.current.play();
-        startTimer();
-      } else {
-        clearInterval(intervalRef.current);
-        audioRef.current.pause();
-      }
-    } else {
-      if (isPlaying) {
-        audioRef.current = new Audio(audioSrc);
-        audioRef.current.play();
-        startTimer();
-      } else {
-        clearInterval(intervalRef.current);
-        audioRef.current.pause();
-      }
-    }
-  }, [isPlaying]);
+  const whilePlaying = () => {
+    progressBar.current.value = audioPlayer.current.currentTime;
+    changePlayerCurrentTime();
+    animationRef.current = requestAnimationFrame(whilePlaying);
+  };
 
-  useEffect(() => {
-    return () => {
-      audioRef.current.pause();
-      clearInterval(intervalRef.current);
-    };
-  }, []);
+  const changeRange = () => {
+    audioPlayer.current.currentTime = progressBar.current.value;
+    // audioPlayer.current.play();
+    changePlayerCurrentTime();
+  };
 
-  const handleNext = () => {};
-
-  const handlePrev = () => {};
-
-  const changeState = () => {
-    setIsPlaying(!isPlaying);
+  const changePlayerCurrentTime = () => {
+    progressBar.current.style.setProperty(
+      "--seek-before-width",
+      `${(progressBar.current.value / duration) * 100}%`
+    );
+    setCurrentTime(progressBar.current.value);
   };
 
   return (
     <Container>
-      <div className="shuffle">
-        <BsShuffle />
+      <audio ref={audioPlayer} src={song1} preload="metadata"></audio>
+      <div className="player">
+        <div className="shuffle">
+          <BsShuffle />
+        </div>
+        <div className="previous">
+          <CgPlayTrackPrev />
+        </div>
+        <div className="state">
+          {isPlaying ? (
+            <BsFillPauseCircleFill onClick={togglePlayPause} />
+          ) : (
+            <BsFillPlayCircleFill onClick={togglePlayPause} />
+          )}
+        </div>
+        <div className="next">
+          <CgPlayTrackNext />
+        </div>
+        <div className="repeat">
+          <FiRepeat />
+        </div>
       </div>
-      <div className="previous">
-        <CgPlayTrackPrev />
-      </div>
-      <div className="state">
-        {isPlaying ? (
-          <BsFillPauseCircleFill onClick={changeState} />
-        ) : (
-          <BsFillPlayCircleFill onClick={changeState} />
-        )}
-      </div>
-      <div className="next">
-        <CgPlayTrackNext />
-      </div>
-      <div className="repeat">
-        <FiRepeat />
+
+      <div className="progressWrapper">
+        <span style={{ color: "white", marginRight: "10px", fontSize: "12px" }}>
+          {currentTime ? getSecondToMinute(currentTime) : "00:00"}
+        </span>
+        <input
+          type="range"
+          className="progressBar"
+          defaultValue={0}
+          ref={progressBar}
+          onChange={changeRange}
+        />
+
+        <span style={{ color: "white", marginLeft: "10px", fontSize: "12px" }}>
+          {duration ? getSecondToMinute(duration) : "00:00"}
+        </span>
       </div>
     </Container>
   );
 }
 
 const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  .player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   gap: 2rem;
   svg {
     color: #b3b3b3;
@@ -121,5 +132,114 @@ const Container = styled.div`
   .next,
   .state {
     font-size: 2rem;
+  }
+
+  .progressWrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .progressBar {
+    --bar-bg: #ffe3d4;
+    --seek-before-width: 0;
+    --seek-before-color: #ffc2a1;
+    --knobby: #3452a5;
+    --selectedKnobby: #26c9c3;
+    --height: 5px
+
+    appearance: none;
+    background: var(--bar-bg);
+    border-radius: 10px;
+    position: relative;
+    width: 100%;
+    height: 5px;
+    outline: none;
+  }
+
+  /* progress bar - safari */
+  .progressBar::-webkit-slider-runnable-track {
+    background: var(--bar-bg);
+    border-radius: 10px;
+    position: relative;
+    width: 100%;
+    height: 5px;
+    outline: none;
+  }
+
+  /* progress bar - firefox */
+  .progressBar::-moz-range-track {
+    background: var(--bar-bg);
+    border-radius: 10px;
+    position: relative;
+    width: 100%;
+    height: 5px;
+    outline: none;
+  }
+
+  .progressBar::-moz-focus-outer {
+    border: 0;
+  }
+
+  /* progress bar - chrome and safari */
+  .progressBar::before {
+    content: "";
+    height: 5px;
+    width: var(--seek-before-width);
+    background-color: var(--seek-before-color);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+  /* progress bar - firefox */
+  .progressBar::-moz-range-progress {
+    background-color: var(--seek-before-color);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    height: 5px;
+  }
+
+  /* knobby - chrome and safari */
+  .progressBar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--knobby);
+    cursor: pointer;
+    position: relative;
+    margin: -5px 0 0 0;
+    z-index: 3;
+    box-sizing: border-box;
+  }
+
+  /* knobby while dragging - chrome and safari */
+  .progressBar:active::-webkit-slider-thumb {
+    /* transform: scale(1.2); */
+    background: var(--selectedKnobby);
+  }
+
+  /* knobby - firefox */
+  .progressBar::-moz-range-thumb {
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    border: transparent;
+    background-color: var(--knobby);
+    cursor: pointer;
+    position: relative;
+    z-index: 3;
+    box-sizing: border-box;
+  }
+
+  /* knobby while dragging - firefox */
+  .progressBar:active::-moz-range-thumb {
+    /* transform: scale(1.2); */
+    background: var(--selectedKnobby);
   }
 `;

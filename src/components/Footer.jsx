@@ -9,7 +9,6 @@ export default function Footer() {
     <Container>
       <CurrentTrack />
       <PlayerControls />
-      <Volume />
     </Container>
   );
 }
