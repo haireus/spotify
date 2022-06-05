@@ -53,6 +53,10 @@ export const SINGER = {
   VU_CAT_TUONG: "Vũ Cát Tường",
   TRA_MY_IDOL: "Trà My Idol",
   Shingo_Sekiguchi: "Shingo Sekiguchi",
+  DOAN_HIEU: "Doãn Hiếu",
+  BURBANK: "Burbank",
+  KAI_DINH: "Kai Đinh",
+  QUILL: "Quill",
 };
 
 export const PODCAST_AUTHOR = {

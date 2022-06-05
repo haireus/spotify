@@ -27,7 +27,6 @@ export default function Playlist() {
   const item = MY_PLAYLISTS.find((el) => el.id === Number(id));
   const listMusic = DATA_MUSIC.filter((el) => el.playlists.includes(item.name));
 
-  console.log(listMusic);
   return (
     <div className="container">
       <div className="wrapper-header">
@@ -35,7 +34,7 @@ export default function Playlist() {
           <div></div>
           <div className="avatar">
             <img src={avatar} alt="" />
-            <span>Hải Đinh</span>
+            <span>Phương Nhung</span>
           </div>
         </div>
 
@@ -45,7 +44,7 @@ export default function Playlist() {
             <div className="header-playlist-right-header-1">PLAYLIST</div>
             <div className="header-playlist-right-header-2">{item.name}</div>
             <div className="header-playlist-right-header-1">
-              Hải Đinh · {listMusic.length} song
+              Phương Nhung · {listMusic.length} song
             </div>
           </div>
         </div>
