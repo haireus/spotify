@@ -50,7 +50,7 @@ import vetMuaImg from "../assets/img/Vết mưa.jpeg";
 import yeuXa from "../assets/mp3/Yêu xa.mp3";
 import yeuXaImg from "../assets/img/Yêu xa.jpeg";
 
-import bietTimDau from "../assets/mp3/Biết tìm đâu 𝙨𝙡𝙤𝙬𝙚𝙙  𝙧𝙚𝙫𝙚𝙧𝙗.mp3";
+import bietTimDau from "../assets/mp3/Biết tìm đâu.mp3";
 import bietTimDauImg from "../assets/img/Biết tìm đâu.jpeg";
 
 import crazyImg from "../assets/img/crazy beauz & JVNA.jpeg";
