@@ -40,6 +40,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
+
+  margin-bottom: 30px;
 }
 
 .my-list-item {
@@ -81,4 +83,50 @@
 }
 .my-list-item:hover > .my-list-item-play {
   visibility: visible;
+}
+
+.podcast {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.podcast-item {
+  width: 160px;
+  padding: 15px;
+  background-color: black;
+  margin-right: 30px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.podcast-item:hover {
+  background-color: rgb(38, 38, 38);
+}
+
+.podcast-item-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.podcast-item-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.podcast-item-authors {
+  color: rgb(182, 181, 181);
+  font-size: 12px;
+  margin-top: 10px;
+  font-weight: 500;
+  margin-bottom: 20px;
 }

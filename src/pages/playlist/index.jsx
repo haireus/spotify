@@ -8,11 +8,15 @@ import { MY_PLAYLISTS } from "../../utils/Constants";
 import { getHour } from "../../utils/helper";
 import "./playlist.css";
 import { DATA_MUSIC } from "../../utils/dataMusic";
+import { useStateProvider } from "../../utils/StateProvider";
+import { reducerCases } from "../../utils/Constants";
 
 export default function Playlist() {
   const history = useHistory();
   const location = useLocation();
   const [isPlaying, setIsPlaying] = useState(false);
+  const [{ currentPlaying, playerState, playlists }, dispatch] =
+    useStateProvider();
 
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
@@ -22,6 +26,8 @@ export default function Playlist() {
 
   const item = MY_PLAYLISTS.find((el) => el.id === Number(id));
   const listMusic = DATA_MUSIC.filter((el) => el.playlists.includes(item.name));
+
+  console.log(listMusic);
   return (
     <div className="container">
       <div className="wrapper-header">
@@ -29,7 +35,7 @@ export default function Playlist() {
           <div></div>
           <div className="avatar">
             <img src={avatar} alt="" />
-            <span>Phương Nhung</span>
+            <span>Hải Đinh</span>
           </div>
         </div>
 
@@ -39,7 +45,7 @@ export default function Playlist() {
             <div className="header-playlist-right-header-1">PLAYLIST</div>
             <div className="header-playlist-right-header-2">{item.name}</div>
             <div className="header-playlist-right-header-1">
-              Phương Nhung · {listMusic.length} song
+              Hải Đinh · {listMusic.length} song
             </div>
           </div>
         </div>
@@ -47,7 +53,7 @@ export default function Playlist() {
 
       <div className="playlist">
         <div className="button-play">
-          {isPlaying ? (
+          {playerState ? (
             <BsFillPauseCircleFill onClick={togglePlayPause} />
           ) : (
             <BsFillPlayCircleFill onClick={togglePlayPause} />
@@ -64,8 +70,41 @@ export default function Playlist() {
           </div>
 
           {listMusic.map((el, index) => (
-            <div className="table-playlist-body">
-              <div>{index + 1}</div>
+            <div
+              className="table-playlist-body"
+              onClick={() => {
+                dispatch({
+                  type: reducerCases.SET_PLAYING,
+                  currentPlaying: el,
+                });
+
+                if (!playerState) {
+                  dispatch({
+                    type: reducerCases.SET_PLAYER_STATE,
+                    playerState: true,
+                  });
+                }
+
+                if (!playlists.length) {
+                  dispatch({
+                    type: reducerCases.SET_PLAYLISTS,
+                    playlists: listMusic,
+                  });
+                }
+              }}
+              key={el.id}
+            >
+              <div>
+                {el.id === currentPlaying?.id ? (
+                  playerState ? (
+                    <BsFillPauseCircleFill />
+                  ) : (
+                    <BsFillPlayCircleFill />
+                  )
+                ) : (
+                  index + 1
+                )}
+              </div>
               <div className="table-playlist-item-title">
                 <img src={el.img} alt="" />
 

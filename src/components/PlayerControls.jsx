@@ -10,14 +10,14 @@ import { FiRepeat } from "react-icons/fi";
 import { useStateProvider } from "../utils/StateProvider";
 
 import { reducerCases } from "../utils/Constants";
-import song1 from "../assets/mp3/Bao Lâu Ta Lại Yêu Một Người l Doãn Hiếu.mp3";
-import song2 from "../assets/mp3/Playlist 1 Hour Acoustic Music To Cheer You Up On A Tough Day.mp3";
 
 import { getSecondToMinute } from "../utils/helper";
 
 export default function PlayerControls() {
+  const [{ currentPlaying, playerState, playlists }, dispatch] =
+    useStateProvider();
+
   // state
-  const [isPlaying, setIsPlaying] = useState(false);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
 
@@ -33,8 +33,11 @@ export default function PlayerControls() {
   }, [audioPlayer?.current?.loadedmetadata, audioPlayer?.current?.readyState]);
 
   const togglePlayPause = () => {
-    const prevValue = isPlaying;
-    setIsPlaying(!prevValue);
+    const prevValue = playerState;
+    dispatch({
+      type: reducerCases.SET_PLAYER_STATE,
+      playerState: !playerState,
+    });
     if (!prevValue) {
       audioPlayer.current.play();
       animationRef.current = requestAnimationFrame(whilePlaying);
@@ -43,6 +46,16 @@ export default function PlayerControls() {
       cancelAnimationFrame(animationRef.current);
     }
   };
+
+  useEffect(() => {
+    if (playerState) {
+      audioPlayer.current.play();
+      // animationRef.current = requestAnimationFrame(whilePlaying);
+    }
+    if (Math.floor(currentTime) === Math.floor(duration)) {
+      handleNext();
+    }
+  }, [playerState, currentPlaying, currentTime, duration]);
 
   const whilePlaying = () => {
     progressBar.current.value = audioPlayer.current.currentTime;
@@ -64,24 +77,42 @@ export default function PlayerControls() {
     setCurrentTime(progressBar.current.value);
   };
 
+  const handleNext = () => {
+    dispatch({
+      type: reducerCases.SET_PLAYING,
+      currentPlaying: playlists.find((el) => el.id === currentPlaying.id + 1),
+    });
+  };
+
+  const handlePrev = () => {
+    dispatch({
+      type: reducerCases.SET_PLAYING,
+      currentPlaying: playlists.find((el) => el.id === currentPlaying.id - 1),
+    });
+  };
+
   return (
     <Container>
-      <audio ref={audioPlayer} src={song1} preload="metadata"></audio>
+      <audio
+        ref={audioPlayer}
+        src={currentPlaying?.url}
+        preload="metadata"
+      ></audio>
       <div className="player">
         <div className="shuffle">
           <BsShuffle />
         </div>
-        <div className="previous">
+        <div className="previous" onClick={handlePrev}>
           <CgPlayTrackPrev />
         </div>
         <div className="state">
-          {isPlaying ? (
+          {playerState ? (
             <BsFillPauseCircleFill onClick={togglePlayPause} />
           ) : (
             <BsFillPlayCircleFill onClick={togglePlayPause} />
           )}
         </div>
-        <div className="next">
+        <div className="next" onClick={handleNext}>
           <CgPlayTrackNext />
         </div>
         <div className="repeat">

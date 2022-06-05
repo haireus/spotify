@@ -1,29 +1,15 @@
-import React, { useEffect, useRef, useState, Suspense, lazy } from "react";
+import React, { Suspense, lazy } from "react";
 import { Switch, Route } from "react-router-dom";
 
 import Sidebar from "./components/Sidebar";
 import styled from "styled-components";
 import Footer from "./components/Footer";
-import Navbar from "./components/Navbar";
-import Body from "./components/Body";
 
 const Home = lazy(() => import("./pages/home"));
 const Search = lazy(() => import("./pages/search"));
 const PlayList = lazy(() => import("./pages/playlist"));
 
 export default function App() {
-  const [navBackground, setNavBackground] = useState(false);
-  const [headerBackground, setHeaderBackground] = useState(false);
-  const bodyRef = useRef();
-  const bodyScrolled = () => {
-    bodyRef.current.scrollTop >= 30
-      ? setNavBackground(true)
-      : setNavBackground(false);
-    bodyRef.current.scrollTop >= 268
-      ? setHeaderBackground(true)
-      : setHeaderBackground(false);
-  };
-
   return (
     <Container>
       <div className="spotify__body">
@@ -37,13 +23,6 @@ export default function App() {
             </Switch>
           </Suspense>
         </div>
-
-        {/* <div className="body" ref={bodyRef} onScroll={bodyScrolled}>
-          <Navbar navBackground={navBackground} />
-          <div className="body__contents">
-            <Body headerBackground={headerBackground} />
-          </div>
-        </div> */}
       </div>
       <div className="spotify__footer">
         <Footer />

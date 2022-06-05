@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BsFillPauseCircleFill, BsFillPlayCircleFill } from "react-icons/bs";
 import { useHistory } from "react-router-dom";
 import avatar from "../../assets/img/nhung.jpeg";
-import { MY_PLAYLISTS } from "../../utils/Constants";
+import { MY_PLAYLISTS, MY_PODCAST } from "../../utils/Constants";
 import { getHour } from "../../utils/helper";
 import "./home.css";
 
@@ -30,7 +30,7 @@ export default function Home() {
         <div></div>
         <div className="avatar">
           <img src={avatar} alt="" />
-          <span>Phương Nhung</span>
+          <span>Hải Đinh</span>
         </div>
       </div>
 
@@ -52,6 +52,18 @@ export default function Home() {
                 <BsFillPlayCircleFill onClick={togglePlayPause} />
               )}
             </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="text-primary">Yours Podcasts</div>
+
+      <div className="podcast">
+        {MY_PODCAST.map((el) => (
+          <div className="podcast-item">
+            <img className="podcast-item-img" src={el.img} alt="" />
+            <div className="podcast-item-name">{el.name} </div>
+            <div className="podcast-item-authors">{el.authors} </div>
           </div>
         ))}
       </div>
