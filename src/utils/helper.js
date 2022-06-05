@@ -12,3 +12,9 @@ export const getSecondToMinute = (value) => {
   }
   return minutes + ":" + seconds;
 };
+
+export const getHour = () => {
+  const d = new Date();
+  const hour = d.getHours();
+  return hour;
+};

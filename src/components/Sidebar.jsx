@@ -21,7 +21,7 @@ export default function Sidebar() {
   return (
     <Container>
       <div className="top__links">
-        <div className="logo">
+        <div className="logo" onClick={() => history.push("/")}>
           <img
             src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_White.png"
             alt="spotify"
@@ -67,6 +67,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     .logo {
+      cursor: pointer;
       text-align: center;
       margin: 1rem 0;
       img {

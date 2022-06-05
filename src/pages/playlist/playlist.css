@@ -1,0 +1,135 @@
+.container {
+  padding: 0px;
+}
+
+.wrapper-header {
+  background: linear-gradient(transparent 0, rgba(0, 0, 0, 0.5) 100%),
+    rgb(42, 124, 143);
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.avatar {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  border-radius: 30px;
+  background-color: black;
+  color: white;
+  font-weight: 500;
+  padding-right: 10px;
+}
+
+.avatar > img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.header-playlist {
+  display: flex;
+  margin-top: 30px;
+}
+
+.header-playlist > img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.header-playlist-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.header-playlist-right-header-1 {
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.header-playlist-right-header-2 {
+  color: white;
+  font-weight: bold;
+  font-size: 50px;
+}
+
+.playlist {
+  padding: 10px 20px;
+}
+
+.button-play {
+  font-size: 50px;
+  width: fit-content;
+  background-color: black;
+  color: rgb(17, 223, 17);
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.table-playlist {
+  margin-top: 30px;
+}
+
+.table-playlist-header {
+  display: grid;
+  grid-template-columns: 1fr 4fr 2fr 2fr 2fr;
+  color: rgb(173, 173, 173);
+  font-size: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(173, 173, 173);
+  margin-bottom: 10px;
+}
+
+.table-playlist-body {
+  display: grid;
+  grid-template-columns: 1fr 4fr 2fr 2fr 2fr;
+  color: rgb(236, 234, 234);
+  font-size: 15px;
+  align-items: center;
+  padding: 20px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.table-playlist-body:hover {
+  background-color: rgba(68, 68, 68, 0.449);
+}
+
+.table-playlist-item-title {
+  display: flex;
+}
+
+.table-playlist-item-title > img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+.table-playlist-item-name {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.table-playlist-item-name-1 {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.table-playlist-item-name-2 {
+  font-size: 12px;
+  color: rgb(218, 216, 216);
+}

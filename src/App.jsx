@@ -9,6 +9,7 @@ import Body from "./components/Body";
 
 const Home = lazy(() => import("./pages/home"));
 const Search = lazy(() => import("./pages/search"));
+const PlayList = lazy(() => import("./pages/playlist"));
 
 export default function App() {
   const [navBackground, setNavBackground] = useState(false);
@@ -27,12 +28,16 @@ export default function App() {
     <Container>
       <div className="spotify__body">
         <Sidebar />
-        <Suspense fallback={null}>
-          <Switch>
-            <Route path="/" exact component={Home} />
-            <Route path="/search" exact component={Search} />
-          </Switch>
-        </Suspense>
+        <div style={{ overflow: "auto" }}>
+          <Suspense fallback={null}>
+            <Switch>
+              <Route path="/" exact component={Home} />
+              <Route path="/search" exact component={Search} />
+              <Route path="/playlist" exact component={PlayList} />
+            </Switch>
+          </Suspense>
+        </div>
+
         {/* <div className="body" ref={bodyRef} onScroll={bodyScrolled}>
           <Navbar navBackground={navBackground} />
           <div className="body__contents">
@@ -50,7 +55,7 @@ export default function App() {
 const Container = styled.div`
   max-width: 100vw;
   max-height: 100vh;
-  overflow: hidden;
+  overflow: auto;
   display: grid;
   grid-template-rows: 85vh 15vh;
   .spotify__body {
