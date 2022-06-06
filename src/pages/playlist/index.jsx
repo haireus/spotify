@@ -34,7 +34,7 @@ export default function Playlist() {
           <div></div>
           <div className="avatar">
             <img src={avatar} alt="" />
-            <span>Phương Nhung</span>
+            <span>Hải Đinh</span>
           </div>
         </div>
 
@@ -44,7 +44,7 @@ export default function Playlist() {
             <div className="header-playlist-right-header-1">PLAYLIST</div>
             <div className="header-playlist-right-header-2">{item.name}</div>
             <div className="header-playlist-right-header-1">
-              Phương Nhung · {listMusic.length} song
+              Hải Đinh · {listMusic.length} song
             </div>
           </div>
         </div>

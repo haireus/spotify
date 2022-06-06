@@ -30,7 +30,7 @@ export default function Home() {
         <div></div>
         <div className="avatar">
           <img src={avatar} alt="" />
-          <span>Phương Nhung</span>
+          <span>Hải Đinh</span>
         </div>
       </div>
 
