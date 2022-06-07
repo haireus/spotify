@@ -86,9 +86,9 @@
   grid-template-columns: 1fr 4fr 2fr 2fr 2fr;
   color: rgb(173, 173, 173);
   font-size: 12px;
-  padding-bottom: 10px;
   border-bottom: 1px solid rgb(173, 173, 173);
   margin-bottom: 10px;
+  padding: 20px 10px;
 }
 
 .table-playlist-body {
@@ -132,4 +132,8 @@
 .table-playlist-item-name-2 {
   font-size: 12px;
   color: rgb(218, 216, 216);
+}
+
+.active-playlist-item {
+  background-color: rgba(46, 45, 45, 0.449);
 }

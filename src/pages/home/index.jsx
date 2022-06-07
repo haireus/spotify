@@ -25,12 +25,12 @@ export default function Home() {
     history.push(`/playlist?id=${id}`);
   };
   return (
-    <div className="container">
+    <div className="page-container">
       <div className="header">
         <div></div>
         <div className="avatar">
           <img src={avatar} alt="" />
-          <span>Hải Đinh</span>
+          <span>Phương Nhung</span>
         </div>
       </div>
 

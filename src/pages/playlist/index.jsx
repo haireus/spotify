@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { BsFillPauseCircleFill, BsFillPlayCircleFill } from "react-icons/bs";
-import { useLocation } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import querystring from "query-string";
-import { useHistory } from "react-router-dom";
+import classnames from "classnames";
 import avatar from "../../assets/img/nhung.jpeg";
 import { MY_PLAYLISTS } from "../../utils/Constants";
-import { getHour } from "../../utils/helper";
 import "./playlist.css";
 import { DATA_MUSIC } from "../../utils/dataMusic";
 import { useStateProvider } from "../../utils/StateProvider";
@@ -34,7 +33,7 @@ export default function Playlist() {
           <div></div>
           <div className="avatar">
             <img src={avatar} alt="" />
-            <span>Hải Đinh</span>
+            <span>Phương Nhung</span>
           </div>
         </div>
 
@@ -44,7 +43,7 @@ export default function Playlist() {
             <div className="header-playlist-right-header-1">PLAYLIST</div>
             <div className="header-playlist-right-header-2">{item.name}</div>
             <div className="header-playlist-right-header-1">
-              Hải Đinh · {listMusic.length} song
+              Phương Nhung · {listMusic.length} song
             </div>
           </div>
         </div>
@@ -70,7 +69,10 @@ export default function Playlist() {
 
           {listMusic.map((el, index) => (
             <div
-              className="table-playlist-body"
+              className={classnames({
+                "table-playlist-body": true,
+                "active-playlist-item": el.id === currentPlaying?.id,
+              })}
               onClick={() => {
                 dispatch({
                   type: reducerCases.SET_PLAYING,
